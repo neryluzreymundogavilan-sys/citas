@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Web de Atención Psicológica - IESTP Manuel Scorza Torre</title>
+  
+  <!-- Tailwind CSS Dev CDN -->
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+
+  <!-- Firebase SDK v10 (Firebase App, Auth, Firestore) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    h1, h2, h3, h4, h5, .font-heading {
+      font-family: 'Outfit', sans-serif;
+    }
+    :root {
+      --celeste-50: #f0f9ff;
+      --celeste-100: #e0f2fe;
+      --celeste-500: #0284c7;
+      --celeste-600: #0369a1;
+      --turquesa-50: #f0fdfa;
+      --turquesa-100: #ccfbf1;
+      --turquesa-500: #14b8a6;
+      --turquesa-600: #0d9488;
+      --turquesa-700: #0f766e;
+    }
+    .bg-gradient-soft {
+      background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 50%, #f0fdfa 100%);
+    }
+    .badge-presencial { background-color: #e0f2fe; color: #0369a1; }
+    .badge-virtual { background-color: #ccfbf1; color: #0f766e; }
+    .badge-pendiente { background-color: #fef3c7; color: #92400e; }
+    .badge-confirmada { background-color: #dbeafe; color: #1e40af; }
+    .badge-atendida, .badge-finalizada { background-color: #d1fae5; color: #065f46; font-weight: 700; }
+    .badge-cancelada { background-color: #fee2e2; color: #991b1b; }
+    .badge-en-atencion { background-color: #f3e8ff; color: #6b21a8; font-weight: 700; border: 1px solid #d8b4fe; }
+    
+    .fade-in {
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Sidebar Púrpura Elegante Idéntico al Diseño del Usuario */
+    .sidebar-purple-bg {
+      background-color: #2D1863;
+    }
+    .sidebar-nav-item {
+      color: rgba(255, 255, 255, 0.82);
+      border-radius: 0.85rem;
+      transition: all 0.2s ease-in-out;
+    }
+    .sidebar-nav-item:hover {
+      background-color: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+    .sidebar-nav-item.active, .sidebar-btn.active {
+      background: linear-gradient(135deg, #6C44D4 0%, #5833B9 100%) !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      box-shadow: 0 4px 16px rgba(88, 51, 185, 0.45) !important;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col selection:bg-teal-500 selection:text-white">
+
+  <!-- ==================================================================== -->
+  <!-- NAVBAR SUPERIOR INSTITUCIONAL (VISIBLE EN MODO PÚBLICO)              -->
+  <!-- ==================================================================== -->
+  <header id="public-header" class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 shadow-sm transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Logo y Nombre Institucional -->
+      <div class="flex items-center space-x-3.5 cursor-pointer" onclick="navigatePublic('sec-inicio')">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-600 to-sky-600 flex items-center justify-center text-white text-2xl shadow-md shadow-teal-500/20">
+          🧠
+        </div>
+        <div>
+          <span class="text-xs uppercase tracking-wider font-extrabold text-teal-700 block leading-tight">IESTP Manuel Scorza Torre</span>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight font-heading">Consultorio Psicológico</h1>
+        </div>
+      </div>
+
+      <!-- Menú de Navegación Público -->
+      <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-xs font-semibold text-slate-600">
+        <button onclick="navigatePublic('sec-inicio')" class="nav-public-btn px-3 py-2 rounded-xl hover:text-teal-700 hover:bg-teal-50 transition">Inicio</button>
+        <button onclick="navigatePublic('sec-nosotros')" class="nav-public-btn px-3 py-2 rounded-xl hover:text-teal-700 hover:bg-teal-50 transition">Nosotros</button>
+        <button onclick="navigatePublic('sec-servicios')" class="nav-public-btn px-3 py-2 rounded-xl hover:text-teal-700 hover:bg-teal-50 transition">Servicios psicológicos</button>
+        <button onclick="navigatePublic('sec-psicologos')" class="nav-public-btn px-3 py-2 rounded-xl hover:text-teal-700 hover:bg-teal-50 transition">Psicólogos</button>
+        <button onclick="navigatePublic('sec-contacto')" class="nav-public-btn px-3 py-2 rounded-xl hover:text-teal-700 hover:bg-teal-50 transition">Contacto</button>
+      </nav>
+
+      <!-- Botones de Autenticación y Acceso al Panel -->
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <div id="top-auth-guest" class="flex items-center space-x-2 text-xs font-bold">
+          <button onclick="openAuthModal('login')" class="px-3.5 py-2 rounded-xl text-teal-800 hover:bg-teal-50 border border-teal-200 transition">
+            Iniciar sesión
+          </button>
+          <button onclick="openAuthModal('register')" class="px-4 py-2 rounded-xl bg-gradient-to-r from-teal-600 to-sky-600 hover:from-teal-700 hover:to-sky-700 text-white shadow-sm transition">
+            Registrarse
+          </button>
+        </div>
+
+        <div id="top-auth-logged" class="hidden flex items-center space-x-2 text-xs">
+          <button onclick="goToPanel()" class="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold shadow-sm transition">
+            <span>📊 Ir a Mi Panel</span>
+          </button>
+          <button onclick="logout()" title="Cerrar Sesión" class="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 transition">
+            🚪
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================================================================== -->
+  <!-- VISTA PÚBLICA: PÁGINA PRINCIPAL (LANDING INSTITUCIONAL)              -->
+  <!-- ==================================================================== -->
+  <main id="view-public" class="flex-grow">
+
+    <!-- 1. SECCIÓN: INICIO (HERO BANNER) -->
+    <section id="sec-inicio" class="relative pt-12 pb-20 md:py-24 bg-gradient-soft overflow-hidden border-b border-sky-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+            <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-teal-100/70 border border-teal-200 text-teal-800 text-xs font-semibold tracking-wide">
+              <span>🌿 Espacio Clínico Confidencial & Gratuito</span>
+              <span class="w-1.5 h-1.5 rounded-full bg-teal-600 animate-pulse"></span>
+            </div>
+            
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 font-heading leading-tight tracking-tight">
+              Atención Psicológica y Bienestar Estudiantil <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-sky-600">Scorza</span>
+            </h2>
+            
+            <p class="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl">
+              Brindamos soporte psicopedagógico, orientación vocacional y consejería emocional personalizada a los estudiantes de <strong>Arquitectura de Plataformas TI, Enfermería Técnica y Mecánica Automotriz</strong> del IESTP Manuel Scorza Torre (Acobamba - Huancavelica).
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2 text-xs font-bold">
+              <button onclick="handleHeroSolicitarCita()" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white shadow-lg shadow-teal-600/25 transition">
+                📅 Solicitar Cita Ahora
+              </button>
+              <button onclick="navigatePublic('sec-servicios')" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 transition">
+                Conoce Nuestros Servicios ↓
+              </button>
+            </div>
+
+            <!-- Badges de Confianza -->
+            <div class="grid grid-cols-3 gap-3 pt-6 border-t border-slate-200/80 text-center sm:text-left">
+              <div>
+                <p class="text-xl sm:text-2xl font-extrabold text-slate-900 font-heading">100%</p>
+                <p class="text-[11px] text-slate-500 font-medium">Confidencial</p>
+              </div>
+              <div>
+                <p class="text-xl sm:text-2xl font-extrabold text-teal-700 font-heading">3 Especialistas</p>
+                <p class="text-[11px] text-slate-500 font-medium">Consultorios A y B</p>
+              </div>
+              <div>
+                <p class="text-xl sm:text-2xl font-extrabold text-sky-700 font-heading">Híbrido</p>
+                <p class="text-[11px] text-slate-500 font-medium">Presencial / Virtual</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 relative">
+            <div class="relative mx-auto max-w-md bg-white p-6 rounded-3xl shadow-xl border border-teal-50 space-y-4">
+              <div class="flex items-center space-x-3 pb-3 border-b border-slate-100">
+                <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-xl font-bold">📋</div>
+                <div>
+                  <h3 class="font-bold text-sm text-slate-900">Agenda de Atención</h3>
+                  <p class="text-[11px] text-teal-600 font-semibold">Consultorio Scorza - Acobamba</p>
+                </div>
+              </div>
+              
+              <div class="p-3.5 bg-sky-50/70 border border-sky-100 rounded-2xl text-xs space-y-1">
+                <span class="text-[10px] uppercase font-bold text-sky-700 tracking-wider">Horario de Atención</span>
+                <p class="font-bold text-slate-800">Lunes a Viernes: 08:00 AM - 05:00 PM</p>
+                <p class="text-slate-500 text-[11px]">Turnos matutino y vespertino con reserva previa.</p>
+              </div>
+
+              <div class="space-y-2 text-xs">
+                <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl">
+                  <span class="font-semibold text-slate-700">Lic. José Gabriel Quispe</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-100 text-teal-800">Consultorio 01</span>
+                </div>
+                <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl">
+                  <span class="font-semibold text-slate-700">Dra. María Elena Romero</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800">Consultorio 02</span>
+                </div>
+                <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl">
+                  <span class="font-semibold text-slate-700">Lic. Karin Lisbeth Vílchez</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-pink-100 text-pink-800">Consultorio 03</span>
+                </div>
+              </div>
+
+              <button onclick="openAuthModal('login')" class="w-full py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs transition shadow-sm">
+                Acceder a la Plataforma Web →
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. SECCIÓN: NOSOTROS -->
+    <section id="sec-nosotros" class="py-16 md:py-20 bg-white border-b border-slate-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div class="text-center max-w-3xl mx-auto space-y-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-teal-600 bg-teal-50 px-3 py-1 rounded-full">Quiénes Somos</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading">Comprometidos con el Bienestar del Estudiante</h2>
+          <p class="text-xs sm:text-sm text-slate-500 leading-relaxed">
+            El Consultorio Psicológico del IESTP Manuel Scorza Torre es un servicio técnico profesional orientado a fortalecer la salud mental, el rendimiento académico y la calidad de vida de toda nuestra comunidad estudiantil.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+          <div class="p-6 bg-slate-50 rounded-3xl border border-slate-100 space-y-3 hover:border-teal-300 transition">
+            <div class="w-12 h-12 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl font-bold">🎯</div>
+            <h3 class="font-bold text-sm text-slate-900 font-heading">Nuestra Misión</h3>
+            <p class="text-slate-600 leading-relaxed">Brindar atención psicopedagógica y emocional ética, confidencial y de calidad que favorezca la culminación exitosa de los estudios superiores.</p>
+          </div>
+          <div class="p-6 bg-slate-50 rounded-3xl border border-slate-100 space-y-3 hover:border-sky-300 transition">
+            <div class="w-12 h-12 bg-sky-100 text-sky-700 rounded-2xl flex items-center justify-center text-2xl font-bold">👁️</div>
+            <h3 class="font-bold text-sm text-slate-900 font-heading">Nuestra Visión</h3>
+            <p class="text-slate-600 leading-relaxed">Ser el modelo de servicio psicopedagógico referente en la provincia de Acobamba y la región Huancavelica, innovando con herramientas web seguras.</p>
+          </div>
+          <div class="p-6 bg-slate-50 rounded-3xl border border-slate-100 space-y-3 hover:border-emerald-300 transition">
+            <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center text-2xl font-bold">🔒</div>
+            <h3 class="font-bold text-sm text-slate-900 font-heading">Confidencialidad Médica</h3>
+            <p class="text-slate-600 leading-relaxed">Cumplimiento estricto del código de ética del Colegio de Psicólogos del Perú (CPSP) y la Ley de Protección de Datos Personales N° 29733.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. SECCIÓN: SERVICIOS PSICOLÓGICOS -->
+    <section id="sec-servicios" class="py-16 md:py-20 bg-slate-50 border-b border-slate-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div class="text-center max-w-3xl mx-auto space-y-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-sky-600 bg-sky-50 px-3 py-1 rounded-full">Áreas de Especialidad</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading">Servicios Psicológicos Integrales</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Programas diseñados para acompañar las distintas etapas académicas y personales del estudiante.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-xs">
+          <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition space-y-3">
+            <span class="text-3xl block">📚</span>
+            <h3 class="font-bold text-sm text-slate-900 font-heading">Psicopedagogía y Aprendizaje</h3>
+            <p class="text-slate-500">Técnicas de estudio, gestión del tiempo, superación del bloqueo cognitivo y mejora del rendimiento.</p>
+          </div>
+
+          <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition space-y-3">
+            <span class="text-3xl block">🧭</span>
+            <h3 class="font-bold text-sm text-slate-900 font-heading">Orientación Vocacional</h3>
+            <p class="text-slate-500">Clarificación vocacional, proyectos de vida profesional, inserción laboral y transición técnica.</p>
+          </div>
+
+          <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition space-y-3">
+            <span class="text-3xl block">💚</span>
+            <h3 class="font-bold text-sm text-slate-900 font-heading">Apoyo Emocional & Estrés</h3>
+            <p class="text-slate-500">Manejo de la ansiedad previa a evaluaciones finales, estrés académico y regulación del estado de ánimo.</p>
+          </div>
+
+          <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition space-y-3">
+            <span class="text-3xl block">🤝</span>
+            <h3 class="font-bold text-sm text-slate-900 font-heading">Consejería y Crisis</h3>
+            <p class="text-slate-500">Atención prioritaria y soporte socioemocional ante situaciones familiares, duelo o dificultades personales.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. SECCIÓN: PSICÓLOGOS (ESPECIALISTAS) -->
+    <section id="sec-psicologos" class="py-16 md:py-20 bg-white border-b border-slate-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div class="text-center max-w-3xl mx-auto space-y-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-teal-600 bg-teal-50 px-3 py-1 rounded-full">Cuerpo Profesional</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading">Nuestros Psicólogos Colegiados</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Especialistas habilitados asignados a los consultorios del IESTP Manuel Scorza Torre.</p>
+        </div>
+
+        <div id="public-psicologos-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Renderizado dinámico desde app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. SECCIÓN: CONTACTO -->
+    <section id="sec-contacto" class="py-16 md:py-20 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <div class="text-center max-w-2xl mx-auto space-y-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-teal-600 bg-teal-50 px-3 py-1 rounded-full">Contáctanos</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading">Consultorio de Psicología Scorza</h2>
+          <p class="text-xs text-slate-500">Estamos ubicados en el campus institucional para atenderte de forma presencial o virtual.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-xs">
+          <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
+            <h3 class="font-bold text-sm text-slate-900 font-heading">Canales de Atención Institucional</h3>
+            
+            <div class="space-y-3">
+              <div class="flex items-start space-x-3">
+                <span class="text-base">📍</span>
+                <div>
+                  <p class="font-bold text-slate-800">Dirección</p>
+                  <p class="text-slate-500">Av. Los Libertadores S/N, Acobamba, Huancavelica - Perú</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-3">
+                <span class="text-base">🏢</span>
+                <div>
+                  <p class="font-bold text-slate-800">Ubicación en el Campus</p>
+                  <p class="text-slate-500">Pabellón A (Consultorio 01) y Pabellón B (Consultorios 02 y 03)</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-3">
+                <span class="text-base">📞</span>
+                <div>
+                  <p class="font-bold text-slate-800">Teléfono / WhatsApp</p>
+                  <p class="text-slate-500">967-890-123 (Atención al Alumno)</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-3">
+                <span class="text-base">✉️</span>
+                <div>
+                  <p class="font-bold text-slate-800">Correo Electrónico</p>
+                  <p class="text-slate-500">psicologia@scorza.edu.pe</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-3">
+            <h3 class="font-bold text-sm text-slate-900 font-heading">Envía un Mensaje de Consulta Rápida</h3>
+            <form onsubmit="handleContactoSubmit(event)" class="space-y-3">
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Nombre Completo *</label>
+                <input type="text" id="contact-nombre" required class="w-full p-2.5 border rounded-xl bg-slate-50 outline-none focus:ring-2 focus:ring-teal-500">
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">DNI *</label>
+                  <input type="text" id="contact-dni" maxlength="8" required class="w-full p-2.5 border rounded-xl bg-slate-50 outline-none focus:ring-2 focus:ring-teal-500">
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Celular *</label>
+                  <input type="text" id="contact-tel" required class="w-full p-2.5 border rounded-xl bg-slate-50 outline-none focus:ring-2 focus:ring-teal-500">
+                </div>
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Mensaje o Consulta *</label>
+                <textarea id="contact-msg" rows="3" required placeholder="Escriba su consulta aquí..." class="w-full p-2.5 border rounded-xl bg-slate-50 outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+              </div>
+              <button type="submit" class="w-full py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold transition shadow-sm">
+                Enviar Consulta Confidencial
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER INSTITUCIONAL -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 space-y-1">
+      <p class="font-bold text-slate-800">IESTP Manuel Scorza Torre - Consultorio de Psicología & Atención al Alumno</p>
+      <p>Acobamba - Huancavelica • Proyecto Integrador de Análisis y Diseño de Sistemas</p>
+      <p class="text-[11px] text-slate-400 mt-2">
+        Desarrollado por: <span class="font-semibold text-slate-700">Katty Maribel Huaman Acho & Nery Luz Reymundo Gavilan</span>
+      </p>
+    </footer>
+
+  </main>
+
+  <!-- ==================================================================== -->
+  <!-- VISTAS PRIVADAS: PANELES DE CONTROL POR ROL (ADMIN, PSICÓLOGO, PACIENTE) -->
+  <!-- ==================================================================== -->
+  <div id="view-dashboard-container" class="hidden flex-grow flex flex-col md:flex-row bg-[#F4F5FA] min-h-[calc(100vh-5rem)]">
+    
+    <!-- SIDEBAR LATERAL DINÁMICO EXACTO A LA CAPTURA DEL USUARIO (#2D1863) -->
+    <aside id="dashboard-sidebar" class="w-full md:w-64 sidebar-purple-bg text-white flex flex-col shrink-0 shadow-2xl relative select-none z-30 transition-all duration-300">
+      
+      <!-- Logo y Título Institucional idéntico a la imagen -->
+      <div class="p-6 pb-4">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="goToPanel()">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#6C40D4] to-[#A855F7] flex items-center justify-center text-white text-2xl shadow-lg shadow-purple-900/50">
+            🧠
+          </div>
+          <div>
+            <h2 class="font-bold text-white text-base leading-tight font-heading tracking-wide">Citas Psicológicas</h2>
+            <p class="text-[11px] text-purple-200/80 font-medium">Cuida tu mente</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menús Específicos por Rol con Botones Reales -->
+      <nav id="sidebar-menu" class="px-3.5 py-2 space-y-1.5 flex-grow text-xs font-medium overflow-y-auto">
+        <!-- Renderizado dinámico desde app.js para cumplir con cada uno de los botones solicitados -->
+      </nav>
+
+      <!-- Botón de Cerrar Sesión en Sidebar -->
+      <div class="p-4 border-t border-purple-900/60 mt-auto">
+        <button onclick="logout()" class="w-full flex items-center justify-center space-x-2 py-2.5 px-3 rounded-xl bg-purple-950/60 hover:bg-rose-600 text-purple-200 hover:text-white transition font-semibold text-xs shadow-sm">
+          <span>🚪 Cerrar sesión</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ÁREA DE CONTENIDO PRINCIPAL DEL PANEL -->
+    <section class="flex-grow flex flex-col min-w-0 overflow-y-auto">
+      
+      <!-- TOP BAR MODERNA DEL DASHBOARD -->
+      <div class="bg-white border-b border-slate-200/80 px-6 py-4 flex items-center justify-between gap-4 sticky top-0 z-20 shadow-xs">
+        <div class="flex items-center space-x-3 w-full max-w-md">
+          <span class="text-slate-400 text-base">🔍</span>
+          <input type="text" id="top-search-input" oninput="handleTopGlobalSearch(this.value)" placeholder="Buscar citas, psicólogos o pacientes..." class="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-purple-500">
+        </div>
+
+        <div class="flex items-center space-x-3 shrink-0">
+          <!-- Servidor Conectado -->
+          <span class="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Sistema en Línea</span>
+          </span>
+
+          <!-- Notificaciones -->
+          <button onclick="openNotificacionesModal()" title="Notificaciones" class="relative p-2 text-slate-500 hover:text-purple-700 hover:bg-purple-50 rounded-xl transition border border-slate-200">
+            🔔
+            <span id="badge-notif-count" class="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white rounded-full text-[9px] font-bold flex items-center justify-center">2</span>
+          </button>
+
+          <!-- Perfil de Usuario con Avatar -->
+          <div class="flex items-center space-x-2.5 pl-2 border-l border-slate-200">
+            <div id="top-user-avatar" class="w-9 h-9 rounded-full bg-purple-700 text-white font-bold flex items-center justify-center text-xs shadow-sm ring-2 ring-purple-100">
+              K
+            </div>
+            <div class="hidden sm:block text-left text-xs leading-tight">
+              <span id="top-user-name" class="font-bold text-slate-800 block">Katty Huamán</span>
+              <span id="top-user-role" class="text-[10px] text-purple-700 font-bold block uppercase tracking-wider">Administrador</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENEDOR DE SUB-VISTAS DEL PANEL -->
+      <div class="p-4 sm:p-6 lg:p-8 flex-grow space-y-6">
+        
+        <!-- SUB-VISTAS: PANEL ADMINISTRADOR (10 BOTONES CON CONTENIDO REAL) -->
+        <div id="admin-view-inicio" class="panel-subview hidden space-y-6"></div>
+        <div id="admin-view-dashboard" class="panel-subview hidden space-y-6"></div>
+        <div id="admin-view-psicologos" class="panel-subview hidden space-y-6"></div>
+        <div id="admin-view-pacientes" class="panel-subview hidden space-y-6"></div>
+        <div id="admin-view-solicitudes" class="panel-subview hidden space-y-6"></div>
+        <div id="admin-view-citas" class="panel-subview hidden space-y-6"></div>
+        <div id="admin-view-calendario" class="panel-subview hidden space-y-6"></div>
+        <div id="admin-view-reportes" class="panel-subview hidden space-y-6"></div>
+        <div id="admin-view-seguimiento" class="panel-subview hidden space-y-6"></div>
+        <div id="admin-view-notificaciones" class="panel-subview hidden space-y-6"></div>
+        <div id="admin-view-configuracion" class="panel-subview hidden space-y-6"></div>
+        <div id="admin-view-usuarios" class="panel-subview hidden space-y-6"></div>
+
+        <!-- SUB-VISTAS: PANEL PSICÓLOGO (9 BOTONES CON CONTENIDO REAL) -->
+        <div id="psico-view-inicio" class="panel-subview hidden space-y-6"></div>
+        <div id="psico-view-calendario" class="panel-subview hidden space-y-6"></div>
+        <div id="psico-view-agenda" class="panel-subview hidden space-y-6"></div>
+        <div id="psico-view-pacientes" class="panel-subview hidden space-y-6"></div>
+        <div id="psico-view-citas" class="panel-subview hidden space-y-6"></div>
+        <div id="psico-view-registro-sesiones" class="panel-subview hidden space-y-6"></div>
+        <div id="psico-view-registrar-sesion" class="panel-subview hidden space-y-6"></div>
+        <div id="psico-view-historial" class="panel-subview hidden space-y-6"></div>
+        <div id="psico-view-seguimiento" class="panel-subview hidden space-y-6"></div>
+        <div id="psico-view-notificaciones" class="panel-subview hidden space-y-6"></div>
+        <div id="psico-view-perfil" class="panel-subview hidden space-y-6"></div>
+
+        <!-- SUB-VISTAS: PANEL PACIENTE (9 BOTONES CON CONTENIDO REAL) -->
+        <div id="paciente-view-inicio" class="panel-subview hidden space-y-6"></div>
+        <div id="paciente-view-solicitar" class="panel-subview hidden space-y-6"></div>
+        <div id="paciente-view-citas" class="panel-subview hidden space-y-6"></div>
+        <div id="paciente-view-reprogramar" class="panel-subview hidden space-y-6"></div>
+        <div id="paciente-view-cancelar" class="panel-subview hidden space-y-6"></div>
+        <div id="paciente-view-sesiones" class="panel-subview hidden space-y-6"></div>
+        <div id="paciente-view-notificaciones" class="panel-subview hidden space-y-6"></div>
+        <div id="paciente-view-perfil" class="panel-subview hidden space-y-6"></div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL DE AUTENTICACIÓN: LOGIN / REGISTRO / GOOGLE OAUTH              -->
+  <!-- ==================================================================== -->
+  <div id="modal-auth" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-slate-100 flex flex-col max-h-[94vh]">
+      
+      <!-- Modal Header -->
+      <div class="bg-gradient-to-r from-teal-700 to-sky-700 p-6 text-white text-center relative shrink-0">
+        <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-white/80 hover:text-white text-2xl font-bold">&times;</button>
+        <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-2 border border-white/20">🏥</div>
+        <h3 class="font-heading font-bold text-xl leading-tight">Consultorio Psicológico</h3>
+        <p class="text-xs text-teal-100">IESTP Manuel Scorza Torre • Plataforma Segura</p>
+
+        <!-- Selector de Pestañas: Login vs Registro -->
+        <div class="flex mt-4 bg-black/20 p-1 rounded-xl text-xs font-semibold gap-1">
+          <button type="button" id="tab-auth-login" onclick="switchAuthTab('login')" class="flex-1 py-2 rounded-lg bg-white text-teal-900 transition shadow-sm font-bold">
+            🔐 Iniciar sesión
+          </button>
+          <button type="button" id="tab-auth-register" onclick="switchAuthTab('register')" class="flex-1 py-2 rounded-lg text-white/90 hover:text-white transition font-semibold">
+            📝 Registrarse
+          </button>
+        </div>
+      </div>
+
+      <!-- CUERPO MODAL CON SCROLL -->
+      <div class="p-6 overflow-y-auto space-y-4">
+        
+        <!-- ==================== FORMULARIO 1: INICIAR SESIÓN ==================== -->
+        <form id="form-auth-login" onsubmit="handleLoginSubmit(event)" class="space-y-4 text-xs" autocomplete="off">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Correo Electrónico Institucional *</label>
+            <input type="email" id="login-email" value="" placeholder="ejemplo@scorza.edu.pe" required autocomplete="off" class="w-full p-3 border rounded-xl bg-slate-50 focus:ring-2 focus:ring-teal-500 outline-none">
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="font-semibold text-slate-700">Contraseña *</label>
+              <button type="button" onclick="openRecuperarModal()" class="text-[11px] text-teal-700 font-semibold hover:underline">
+                ¿Olvidaste tu contraseña?
+              </button>
+            </div>
+            <div class="relative">
+              <input type="password" id="login-password" value="" placeholder="Ingrese su contraseña" required autocomplete="new-password" class="w-full p-3 pr-10 border rounded-xl bg-slate-50 focus:ring-2 focus:ring-teal-500 outline-none">
+              <button type="button" onclick="togglePasswordVisibility('login-password', this)" title="Mostrar u ocultar contraseña" class="absolute right-3 top-3 text-slate-400 hover:text-slate-700 text-sm focus:outline-none cursor-pointer transition">👁️</button>
+            </div>
+          </div>
+
+          <!-- Casilla de Términos y Condiciones -->
+          <div class="flex items-start space-x-2 pt-1">
+            <input type="checkbox" id="login-terms" checked required class="mt-0.5 rounded text-teal-600 focus:ring-teal-500">
+            <label for="login-terms" class="text-[11px] text-slate-600 leading-tight">
+              Acepto los <a href="#" onclick="openTermsModal(event)" class="text-teal-700 font-bold underline">Términos y Condiciones</a> y la <a href="#" onclick="openPrivacyModal(event)" class="text-teal-700 font-bold underline">Política de Privacidad</a> del IESTP.
+            </label>
+          </div>
+
+          <button type="submit" class="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold transition shadow-md shadow-teal-600/20 text-xs flex items-center justify-center space-x-2">
+            <span>🔐 Iniciar sesión seguro</span>
+          </button>
+
+          <!-- Ayuda de Registro para Usuarios Nuevos -->
+          <div class="pt-3 border-t border-slate-100 text-center">
+            <p class="text-[11px] text-slate-500">
+              ¿No tienes una cuenta aún? 
+              <button type="button" onclick="switchAuthTab('register')" class="text-teal-700 font-bold hover:underline">
+                Regístrate aquí como estudiante
+              </button>
+            </p>
+          </div>
+        </form>
+
+        <!-- ==================== FORMULARIO 2: REGISTRO PÚBLICO ==================== -->
+        <form id="form-auth-register" onsubmit="handleRegisterSubmit(event)" class="hidden space-y-3.5 text-xs">
+          
+          <div class="space-y-1.5">
+            <label class="block font-bold text-slate-700">Tipo de Cuenta a Crear: *</label>
+            <div class="grid grid-cols-2 gap-2">
+              <label class="flex items-center space-x-2 p-2.5 rounded-xl border-2 border-teal-500 bg-teal-50/70 cursor-pointer transition" id="label-role-paciente">
+                <input type="radio" name="reg-rol" value="paciente" checked onchange="toggleRegRoleFields('paciente')" class="text-teal-600 focus:ring-teal-500">
+                <div>
+                  <span class="font-bold text-slate-800 text-[11px] block">🎓 Paciente</span>
+                  <span class="text-[10px] text-slate-500">Estudiante Scorza</span>
+                </div>
+              </label>
+              <label class="flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 bg-white cursor-pointer transition" id="label-role-psicologo">
+                <input type="radio" name="reg-rol" value="psicologo" onchange="toggleRegRoleFields('psicologo')" class="text-teal-600 focus:ring-teal-500">
+                <div>
+                  <span class="font-bold text-slate-800 text-[11px] block">🩺 Psicólogo</span>
+                  <span class="text-[10px] text-slate-500">Especialista Colegiado</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Nombres *</label>
+              <input type="text" id="reg-nombres" placeholder="Ej: Gael" required class="w-full p-2.5 border rounded-xl bg-slate-50 outline-none focus:ring-2 focus:ring-teal-500">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Apellidos *</label>
+              <input type="text" id="reg-apellidos" placeholder="Ej: Eslava Cosinga" required class="w-full p-2.5 border rounded-xl bg-slate-50 outline-none focus:ring-2 focus:ring-teal-500">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">DNI (8 dígitos) *</label>
+              <input type="text" id="reg-dni" maxlength="8" placeholder="78901234" required class="w-full p-2.5 border rounded-xl bg-slate-50 outline-none focus:ring-2 focus:ring-teal-500">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Teléfono / Celular *</label>
+              <input type="text" id="reg-telefono" placeholder="987654321" required class="w-full p-2.5 border rounded-xl bg-slate-50 outline-none focus:ring-2 focus:ring-teal-500">
+            </div>
+          </div>
+
+          <div id="reg-paciente-extra" class="space-y-2 p-3 bg-teal-50/60 rounded-xl border border-teal-100">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Carrera Profesional *</label>
+              <select id="reg-carrera" class="w-full p-2 border rounded-xl bg-white outline-none">
+                <option value="Arquitectura de Plataformas TI">Arquitectura de Plataformas TI</option>
+                <option value="Enfermería Técnica">Enfermería Técnica</option>
+                <option value="Mecánica Automotriz">Mecánica Automotriz</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Semestre Académico *</label>
+              <select id="reg-semestre" class="w-full p-2 border rounded-xl bg-white outline-none">
+                <option value="I Semestre">I Semestre</option>
+                <option value="II Semestre">II Semestre</option>
+                <option value="IV Semestre">IV Semestre</option>
+                <option value="VI Semestre">VI Semestre</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="reg-psico-extra" class="hidden space-y-2 p-3 bg-purple-50/60 rounded-xl border border-purple-100">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Colegiatura C.Ps.P. *</label>
+              <input type="text" id="reg-cpsp" placeholder="Ej: C.Ps.P. 34512" class="w-full p-2 border rounded-xl bg-white outline-none">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Especialidad Clínica *</label>
+              <input type="text" id="reg-especialidad" placeholder="Ej: Psicología Clínica y Educativa" class="w-full p-2 border rounded-xl bg-white outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Correo Institucional (@scorza.edu.pe) *</label>
+            <input type="email" id="reg-email" placeholder="usuario@scorza.edu.pe" required class="w-full p-2.5 border rounded-xl bg-slate-50 outline-none focus:ring-2 focus:ring-teal-500">
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Contraseña *</label>
+              <div class="relative">
+                <input type="password" id="reg-password" minlength="6" placeholder="Mínimo 6 caracteres" required class="w-full p-2.5 pr-8 border rounded-xl bg-slate-50 outline-none">
+                <button type="button" onclick="togglePasswordVisibility('reg-password', this)" title="Mostrar u ocultar contraseña" class="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-700 text-xs focus:outline-none cursor-pointer">👁️</button>
+              </div>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Confirmar *</label>
+              <div class="relative">
+                <input type="password" id="reg-password-confirm" minlength="6" placeholder="Repite contraseña" required class="w-full p-2.5 pr-8 border rounded-xl bg-slate-50 outline-none">
+                <button type="button" onclick="togglePasswordVisibility('reg-password-confirm', this)" title="Mostrar u ocultar contraseña" class="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-700 text-xs focus:outline-none cursor-pointer">👁️</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-start space-x-2 pt-1">
+            <input type="checkbox" id="reg-terms" required class="mt-0.5 rounded text-teal-600 focus:ring-teal-500">
+            <label for="reg-terms" class="text-[11px] text-slate-600 leading-tight">
+              Acepto los términos y condiciones del consultorio y autorizo el tratamiento confidencial de mis datos.
+            </label>
+          </div>
+
+          <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-md shadow-emerald-600/20 text-xs">
+            ✨ Completar Registro y Entrar
+          </button>
+
+          <div class="pt-2 text-center">
+            <p class="text-[11px] text-slate-500">
+              ¿Ya tienes una cuenta registrada? 
+              <button type="button" onclick="switchAuthTab('login')" class="text-teal-700 font-bold hover:underline">
+                Inicia sesión aquí
+              </button>
+            </p>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL DINÁMICO REUTILIZABLE PARA OPERACIONES (CRUD, DETALLES, ALERTAS)-->
+  <!-- ==================================================================== -->
+  <div id="modal-operacion-container"></div>
+
+  <!-- ALERTA GLOBAL / TOAST NOTIFICATIONS -->
+  <div id="global-toast" class="fixed bottom-5 right-5 z-50 max-w-sm w-full hidden p-4 rounded-2xl shadow-xl border text-xs font-semibold flex items-center justify-between transition-all fade-in">
+    <div class="flex items-center space-x-2.5">
+      <span id="toast-icon" class="text-base">ℹ️</span>
+      <span id="toast-message">Mensaje del sistema</span>
+    </div>
+    <button onclick="closeToast()" class="text-lg font-bold ml-3 text-slate-400 hover:text-slate-700">&times;</button>
+  </div>
+
+  <!-- SCRIPT APLICATIVO CON ARQUITECTURA MODULAR COMPLETA -->
+  <script src="app.js?v=66"></script>
+</body>
+</html>

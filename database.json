@@ -1,0 +1,303 @@
+{
+  "usuarios": [
+    {
+      "id_usuario": 1,
+      "correo_institucional": "admin.psicologia@scorza.edu.pe",
+      "password_hash": "$2a$10$2BYuPjcQlcg8KEgwo/4eWuiGkfrW4RNxXcSTJ8rH7jPyXqOO00xqW",
+      "nombres": "Administrador",
+      "apellidos": "General del Sistema",
+      "rol": "admin",
+      "estado_cuenta": "Activo",
+      "foto_url": null,
+      "fecha_registro": "2026-09-01T08:00:00Z",
+      "ultimo_acceso": "2026-10-13T16:38:36.039Z"
+    },
+    {
+      "id_usuario": 2,
+      "correo_institucional": "jquispe@scorza.edu.pe",
+      "password_hash": "$2a$10$2BYuPjcQlcg8KEgwo/4eWuhpbV9UD8Flfee7Tab3N4CKbG7QrGUfu",
+      "nombres": "José Gabriel",
+      "apellidos": "Quispe Anyaipoma",
+      "rol": "psicologo",
+      "estado_cuenta": "Activo",
+      "foto_url": null,
+      "fecha_registro": "2026-09-01T08:30:00Z",
+      "ultimo_acceso": "2026-10-13T16:38:36.078Z"
+    },
+    {
+      "id_usuario": 3,
+      "correo_institucional": "mromero@scorza.edu.pe",
+      "password_hash": "$2a$10$2BYuPjcQlcg8KEgwo/4eWu2B2a959RDhA7fPhRfc1Sr9v9iVbam6e",
+      "nombres": "María Elena",
+      "apellidos": "Romero Ccanto",
+      "rol": "psicologo",
+      "estado_cuenta": "Activo",
+      "foto_url": null,
+      "fecha_registro": "2026-09-01T08:45:00Z",
+      "ultimo_acceso": "2026-10-13T16:38:36.078Z"
+    },
+    {
+      "id_usuario": 4,
+      "correo_institucional": "kvilchez@scorza.edu.pe",
+      "password_hash": "$2a$10$2BYuPjcQlcg8KEgwo/4eWu5X1tYxleG8f82U9mcIynIoiuTppAtU2",
+      "nombres": "Karin Lisbeth",
+      "apellidos": "Vílchez Torrealva",
+      "rol": "psicologo",
+      "estado_cuenta": "Activo",
+      "fecha_registro": "2026-09-01T09:00:00Z",
+      "ultimo_acceso": "2026-10-13T16:38:36.078Z"
+    },
+    {
+      "id_usuario": 5,
+      "correo_institucional": "katty.huaman@scorza.edu.pe",
+      "password_hash": "$2a$10$2BYuPjcQlcg8KEgwo/4eWubzCesHCar.V9d1pNLMu5FYjcxUJfmum",
+      "nombres": "Katty Maribel",
+      "apellidos": "Huaman Acho",
+      "rol": "paciente",
+      "estado_cuenta": "Activo",
+      "foto_url": null,
+      "fecha_registro": "2026-09-10T10:00:00Z",
+      "ultimo_acceso": "2026-10-13T16:38:36.078Z"
+    },
+    {
+      "id_usuario": 6,
+      "correo_institucional": "gael.eslava@scorza.edu.pe",
+      "password_hash": "$2a$10$2BYuPjcQlcg8KEgwo/4eWubzCesHCar.V9d1pNLMu5FYjcxUJfmum",
+      "nombres": "Gael",
+      "apellidos": "Eslava Cosinga",
+      "rol": "paciente",
+      "estado_cuenta": "Activo",
+      "foto_url": null,
+      "fecha_registro": "2026-09-12T11:00:00Z",
+      "ultimo_acceso": "2026-10-13T16:38:36.078Z"
+    },
+    {
+      "id_usuario": 7,
+      "correo_institucional": "carmen.flores@scorza.edu.pe",
+      "password_hash": "$2a$10$2BYuPjcQlcg8KEgwo/4eWubzCesHCar.V9d1pNLMu5FYjcxUJfmum",
+      "nombres": "Carmen Rosa",
+      "apellidos": "Flores Taipe",
+      "rol": "paciente",
+      "estado_cuenta": "Activo",
+      "foto_url": null,
+      "fecha_registro": "2026-09-14T12:00:00Z",
+      "ultimo_acceso": "2026-10-13T16:38:36.078Z"
+    }
+  ],
+  "psicologos": [
+    {
+      "id_psicologo": 1,
+      "id_usuario": 2,
+      "nombre_completo": "Lic. José Gabriel Quispe Anyaipoma",
+      "titulo_profesional": "Licenciado en Psicología Clínica y Educativa",
+      "colegiatura_cpsp": "C.Ps.P. 28945",
+      "consultorio": "Consultorio 01 (Pabellón A)",
+      "especialidad": "Psicología Educativa & Manejo del Estrés",
+      "telefono": "964-123456",
+      "correo": "jquispe@scorza.edu.pe",
+      "turnos_disponibles": [
+        "08:00 AM - 10:00 AM",
+        "10:00 AM - 12:00 PM",
+        "02:00 PM - 04:00 PM"
+      ],
+      "modalidades": [
+        "Presencial",
+        "Virtual"
+      ],
+      "disponibilidad": "Disponible",
+      "biografia": "Especialista en intervención psicopedagógica, ansiedad ante evaluaciones académicas y técnicas de autorregulación emocional."
+    },
+    {
+      "id_psicologo": 2,
+      "id_usuario": 3,
+      "nombre_completo": "Dra. María Elena Romero Ccanto",
+      "titulo_profesional": "Doctora en Psicología Clínica y de la Salud",
+      "colegiatura_cpsp": "C.Ps.P. 19432",
+      "consultorio": "Consultorio 02 (Pabellón B)",
+      "especialidad": "Psicología Clínica & Apoyo Emocional",
+      "telefono": "967-891234",
+      "correo": "mromero@scorza.edu.pe",
+      "turnos_disponibles": [
+        "08:30 AM - 10:30 AM",
+        "10:30 AM - 12:30 PM",
+        "02:30 PM - 04:30 PM"
+      ],
+      "modalidades": [
+        "Presencial",
+        "Virtual"
+      ],
+      "disponibilidad": "Disponible",
+      "biografia": "Atención psicoterapéutica individual, manejo de crisis y fortalecimiento de habilidades socioemocionales."
+    },
+    {
+      "id_psicologo": 3,
+      "id_usuario": 4,
+      "nombre_completo": "Lic. Karin Lisbeth Vílchez Torrealva",
+      "titulo_profesional": "Licenciada en Psicología y Orientación Vocacional",
+      "colegiatura_cpsp": "C.Ps.P. 31208",
+      "consultorio": "Consultorio 03 (Pabellón B)",
+      "especialidad": "Orientación Vocacional & Consejería Estudiantil",
+      "telefono": "951-678901",
+      "correo": "kvilchez@scorza.edu.pe",
+      "turnos_disponibles": [
+        "08:00 AM - 11:00 AM",
+        "02:00 PM - 05:00 PM"
+      ],
+      "modalidades": [
+        "Presencial",
+        "Virtual"
+      ],
+      "disponibilidad": "Disponible",
+      "biografia": "Especialista en proyectos de vida profesional, adaptación curricular y técnicas de estudio superior."
+    }
+  ],
+  "pacientes": [
+    {
+      "id_paciente": 1,
+      "id_usuario": 5,
+      "codigo_estudiantil": "APSTI-2024-001",
+      "dni": "73456128",
+      "nombres": "Katty Maribel",
+      "apellidos": "Huaman Acho",
+      "carrera_profesional": "Arquitectura de Plataformas TI",
+      "semestre_academico": "IV Semestre",
+      "telefono": "967890123",
+      "contacto_emergencia": "954-123456 (Madre)",
+      "correo": "katty.huaman@scorza.edu.pe"
+    },
+    {
+      "id_paciente": 2,
+      "id_usuario": 6,
+      "codigo_estudiantil": "APSTI-2026-045",
+      "dni": "78901234",
+      "nombres": "Gael",
+      "apellidos": "Eslava Cosinga",
+      "carrera_profesional": "Arquitectura de Plataformas TI",
+      "semestre_academico": "I Semestre",
+      "telefono": "987654321",
+      "contacto_emergencia": "987-112233 (Padre)",
+      "correo": "gael.eslava@scorza.edu.pe"
+    },
+    {
+      "id_paciente": 3,
+      "id_usuario": 7,
+      "codigo_estudiantil": "ENF-2024-012",
+      "dni": "76891234",
+      "nombres": "Carmen Rosa",
+      "apellidos": "Flores Taipe",
+      "carrera_profesional": "Enfermería Técnica",
+      "semestre_academico": "II Semestre",
+      "telefono": "932145698",
+      "contacto_emergencia": "933-445566 (Hermana)",
+      "correo": "carmen.flores@scorza.edu.pe"
+    }
+  ],
+  "citas": [
+    {
+      "id_cita": 1,
+      "codigo_cita": "CIT-2026-0101",
+      "id_paciente": 1,
+      "paciente_nombre": "Katty Maribel Huaman Acho",
+      "paciente_correo": "katty.huaman@scorza.edu.pe",
+      "id_psicologo": 1,
+      "psicologo_nombre": "Lic. José Gabriel Quispe Anyaipoma",
+      "consultorio": "Consultorio 01 (Pabellón A)",
+      "fecha_cita": "2026-10-16",
+      "hora_inicio": "09:00 AM",
+      "modalidad": "Presencial",
+      "estado_cita": "Confirmada",
+      "motivo_consulta": "Sobrecarga de entregables y gestión del tiempo.",
+      "fecha_creacion": "2026-10-10T10:00:00Z"
+    },
+    {
+      "id_cita": 2,
+      "codigo_cita": "CIT-2026-0102",
+      "id_paciente": 2,
+      "paciente_nombre": "Gael Eslava Cosinga",
+      "paciente_correo": "gael.eslava@scorza.edu.pe",
+      "id_psicologo": 1,
+      "psicologo_nombre": "Lic. José Gabriel Quispe Anyaipoma",
+      "consultorio": "Consultorio 01 (Pabellón A)",
+      "fecha_cita": "2026-10-18",
+      "hora_inicio": "10:00 AM",
+      "modalidad": "Virtual",
+      "estado_cita": "Pendiente",
+      "motivo_consulta": "Adaptación a la vida técnica superior y hábitos de estudio.",
+      "fecha_creacion": "2026-10-11T11:00:00Z"
+    },
+    {
+      "id_cita": 3,
+      "codigo_cita": "CIT-2026-0201",
+      "id_paciente": 3,
+      "paciente_nombre": "Carmen Rosa Flores Taipe",
+      "paciente_correo": "carmen.flores@scorza.edu.pe",
+      "id_psicologo": 2,
+      "psicologo_nombre": "Dra. María Elena Romero Ccanto",
+      "consultorio": "Consultorio 02 (Pabellón B)",
+      "fecha_cita": "2026-10-19",
+      "hora_inicio": "09:30 AM",
+      "modalidad": "Presencial",
+      "estado_cita": "Pendiente",
+      "motivo_consulta": "Aprensión por inicio de prácticas hospitalarias en enfermería.",
+      "fecha_creacion": "2026-10-12T12:00:00Z"
+    }
+  ],
+  "sesiones_clinicas": [
+    {
+      "id_sesion": 1,
+      "id_paciente": 1,
+      "paciente_nombre": "Katty Maribel Huaman Acho",
+      "id_psicologo": 1,
+      "psicologo_nombre": "Lic. José Gabriel Quispe Anyaipoma",
+      "numero_sesion": "Sesión N° 01",
+      "fecha_sesion": "2026-09-20",
+      "diagnostico_cie10": "F43.0 - Reacción al estrés agudo secundario a sobrecarga de actividades académicas.",
+      "evaluacion_conductual": "Paciente colaboradora, orientada en tiempo, espacio y persona. Refiere cansancio y ligera tensión muscular.",
+      "plan_intervencion": "1. Respiración diafragmática (10 min/día).\n2. Matriz de Eisenhower para priorización de tareas.\n3. Higiene del sueño (mínimo 7 horas).",
+      "estado_seguimiento": "En Tratamiento"
+    },
+    {
+      "id_sesion": 2,
+      "id_paciente": 1,
+      "paciente_nombre": "Katty Maribel Huaman Acho",
+      "id_psicologo": 1,
+      "psicologo_nombre": "Lic. José Gabriel Quispe Anyaipoma",
+      "numero_sesion": "Sesión N° 02",
+      "fecha_sesion": "2026-10-04",
+      "diagnostico_cie10": "F43.2 - Trastorno de adaptación con evolución favorable.",
+      "evaluacion_conductual": "Disminución visible del nivel de tensión. Reporta mejor cumplimiento de entregables.",
+      "plan_intervencion": "1. Continuar pausas activas cada 45 minutos.\n2. Sesión quincenal de refuerzo.",
+      "estado_seguimiento": "Evolución Favorable"
+    }
+  ],
+  "notificaciones": [
+    {
+      "id_notificacion": 1,
+      "id_usuario": 5,
+      "tipo": "cita_confirmada",
+      "titulo": "Cita Confirmada",
+      "mensaje": "Su cita para el 16 de Octubre con el Lic. José Gabriel Quispe ha sido confirmada.",
+      "fecha": "2026-10-10T10:05:00Z",
+      "leida": false
+    },
+    {
+      "id_notificacion": 2,
+      "id_usuario": 5,
+      "tipo": "nota_clinica",
+      "titulo": "Nuevas Indicaciones del Psicólogo",
+      "mensaje": "Se han registrado nuevas recomendaciones terapéuticas en su expediente.",
+      "fecha": "2026-10-04T11:30:00Z",
+      "leida": true
+    }
+  ],
+  "configuracion": {
+    "institucion": "IESTP Manuel Scorza Torre - Acobamba",
+    "servicio": "Consultorio Psicológico & Bienestar Estudiantil",
+    "telefono_soporte": "967-890-123",
+    "correo_contacto": "psicologia@scorza.edu.pe",
+    "google_client_id": "TU_CLIENT_ID_DE_GOOGLE.apps.googleusercontent.com",
+    "duracion_cita_minutos": 45,
+    "dias_atencion": "Lunes a Viernes",
+    "horario_atencion": "08:00 AM - 05:00 PM"
+  }
+}
